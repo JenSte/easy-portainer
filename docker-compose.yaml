@@ -1,0 +1,70 @@
+version: '3'
+
+services:
+  traefik:
+    image: "traefik:v2.0"
+    command:
+      - "--api.dashboard=true"
+      - "--providers.docker"
+      - "--providers.docker.exposedbydefault=false"
+      - "--entrypoints.https.address=:443"
+      - "--certificatesResolvers.tlsresolver.acme.tlsChallenge=true"
+      - "--certificatesResolvers.tlsresolver.acme.email=${EMAIL}"
+      - "--certificatesResolvers.tlsresolver.acme.storage=/letsencrypt/acme.json"
+     #- "--accesslog"
+    restart: "unless-stopped"
+    ports:
+      - "443:443"
+    volumes:
+      - "/var/run/docker.sock:/var/run/docker.sock:ro"
+      - "traefik-data:/letsencrypt"
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.traefik.entrypoints=https"
+      - "traefik.http.routers.traefik.tls.certresolver=tlsresolver"
+      - "traefik.http.routers.traefik.rule=Host(`${DOMAIN}`) && (PathPrefix(`/api/`) || PathPrefix(`/dashboard/`))"
+      - "traefik.http.routers.traefik.middlewares=traefik-basicauth@docker"
+      - "traefik.http.middlewares.traefik-basicauth.basicauth.users=${DASHBOARD_CREDENTIALS}"
+      - "traefik.http.middlewares.traefik-basicauth.basicauth.realm=Traefik Dashboard"
+      - "traefik.http.routers.traefik.service=api@internal"
+      - "portainer.hidden=yes"
+  portainer:
+    image: "portainer/portainer"
+    command:
+      - "--admin-password=${PORTAINER_CREDENTIALS}"
+      - "--hide-label"
+      -   "portainer.hidden=yes"
+      - "--no-analytics"
+    restart: "unless-stopped"
+    volumes:
+      - "/var/run/docker.sock:/var/run/docker.sock"
+      - "portainer-data:/data"
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.portainer.entrypoints=https"
+      - "traefik.http.routers.portainer.tls.certresolver=tlsresolver"
+      - "traefik.http.routers.portainer.rule=Host(`${DOMAIN}`) && PathPrefix(`/portainer/`)"
+      - "traefik.http.routers.portainer.middlewares=portainer-stripprefix@docker"
+      - "traefik.http.middlewares.portainer-stripprefix.stripprefix.prefixes=/portainer/"
+      - "portainer.hidden=yes"
+  registry:
+    image: "registry:2"
+    restart: "unless-stopped"
+    ports:
+      - "5000:5000"
+    volumes:
+      - "registry-data:/var/lib/registry"
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.registry.entrypoints=https"
+      - "traefik.http.routers.registry.tls.certresolver=tlsresolver"
+      - "traefik.http.routers.registry.rule=Host(`${DOMAIN}`) && PathPrefix(`/v2/`)"
+      - "traefik.http.routers.registry.middlewares=registry-basicauth@docker"
+      - "traefik.http.middlewares.registry-basicauth.basicauth.users=${REGISTRY_CREDENTIALS}"
+      - "traefik.http.middlewares.registry-basicauth.basicauth.realm=Docker Registry"
+      - "portainer.hidden=yes"
+
+volumes:
+  traefik-data:
+  portainer-data:
+  registry-data:
