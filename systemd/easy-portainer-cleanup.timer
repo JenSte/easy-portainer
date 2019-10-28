@@ -1,0 +1,9 @@
+[Unit]
+Description=Garbage collect docker registry periodically
+
+[Timer]
+OnStartupSec=5min
+OnUnitInactiveSec=5min
+
+[Install]
+WantedBy=timers.target

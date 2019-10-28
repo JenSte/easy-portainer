@@ -37,3 +37,14 @@ A configuration template to get the following up and running within seconds:
   in addition.
 * Containers created by this template are hidden in Portainer. To make them visible, remove the
   `portainer.hidden=true` label.
+* Images deleted using the web UI are not actually removed from the registry. To actually delete them,
+  a garbage collection has to be run inside the registry. This repository contains systemd service and
+  timer units to do this periodically. Installation:
+  ```
+  cp systemd/* /etc/systemd/system/
+  systemctl daemon-reload
+  systemctl enable --now systemctl daemon-reload
+  ```
+  Note that even when all tags of an image are removed, the image is still listed in the top-level list
+  of the UI. See also the corresponding entry in the
+  [Docker Registry UI FAQ](https://github.com/Joxit/docker-registry-ui#faq) and the linked issue.

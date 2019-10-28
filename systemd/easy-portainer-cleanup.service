@@ -1,0 +1,7 @@
+[Unit]
+Description=Garbage collect docker registry
+Requires=docker.service
+
+[Service]
+Type=oneshot
+ExecStart=/usr/bin/docker exec easy-portainer_registry_1 registry garbage-collect /etc/docker/registry/config.yml

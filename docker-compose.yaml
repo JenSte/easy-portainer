@@ -50,6 +50,8 @@ services:
   registry:
     image: "registry:2"
     restart: "unless-stopped"
+    environment:
+      REGISTRY_STORAGE_DELETE_ENABLED: "true"
     ports:
       - "5000:5000"
     volumes:
@@ -69,6 +71,7 @@ services:
     environment:
       REGISTRY_URL: "http://registry:5000"
       REGISTRY_TITLE: "${DOMAIN}"
+      DELETE_IMAGES: "true"
     labels:
       - "traefik.enable=true"
       - "traefik.http.routers.registry-ui.entrypoints=https"
