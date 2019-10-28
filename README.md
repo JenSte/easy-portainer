@@ -5,6 +5,7 @@ A configuration template to get the following up and running within seconds:
 * A [Traefik](https://traefik.io/) reverse proxy with [Let's Encrypt](https://letsencrypt.org/) support.
 * The [Portainer](https://www.portainer.io/) Docker management tool.
 * A self-hosted [Docker registry](https://docs.docker.com/registry/deploying/).
+* [Docker Registry UI](https://joxit.dev/docker-registry-ui/) for the self-hosted registry.
 
 ## Installation
 
@@ -28,6 +29,7 @@ A configuration template to get the following up and running within seconds:
   docker login <your domain>
   ```
   Images pushed to that registry can then be used from within Portainer by selecting the local registry.
+* The user interface for the registry is accessible under `<your domain>/registry-ui/`.
 
 ## Remarks
 

@@ -63,6 +63,22 @@ services:
       - "traefik.http.middlewares.registry-basicauth.basicauth.users=${REGISTRY_CREDENTIALS}"
       - "traefik.http.middlewares.registry-basicauth.basicauth.realm=Docker Registry"
       - "portainer.hidden=yes"
+  registry-ui:
+    image: "joxit/docker-registry-ui:static"
+    restart: "unless-stopped"
+    environment:
+      REGISTRY_URL: "http://registry:5000"
+      REGISTRY_TITLE: "${DOMAIN}"
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.registry-ui.entrypoints=https"
+      - "traefik.http.routers.registry-ui.tls.certresolver=tlsresolver"
+      - "traefik.http.routers.registry-ui.rule=Host(`${DOMAIN}`) && PathPrefix(`/registry-ui/`)"
+      - "traefik.http.routers.registry-ui.middlewares=registry-ui-basicauth@docker,registry-ui-stripprefix@docker"
+      - "traefik.http.middlewares.registry-ui-basicauth.basicauth.users=${UI_CREDENTIALS}"
+      - "traefik.http.middlewares.registry-ui-basicauth.basicauth.realm=Docker Registry User Interface"
+      - "traefik.http.middlewares.registry-ui-stripprefix.stripprefix.prefixes=/registry-ui/"
+      - "portainer.hidden=yes"
 
 volumes:
   traefik-data:
