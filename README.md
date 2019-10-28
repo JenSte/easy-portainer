@@ -22,14 +22,14 @@ A configuration template to get the following up and running within seconds:
 
 * If everything is working properly, the TLS connection to your domain sould be using
   a valid (verified by Let's Encrypt) server certificate.
-* Portainer is accessible under `<your domain>/portainer/`.
-* The Traefik dashboard is accessible under `<your domain>/dashboard/`.
+* Portainer is accessible under `https://<your domain>/portainer/`.
+* The Traefik dashboard is accessible under `https://<your domain>/dashboard/`.
 * The self-hosted container registry is accessed by just using the domain name (no port 5000):
   ```
   docker login <your domain>
   ```
   Images pushed to that registry can then be used from within Portainer by selecting the local registry.
-* The user interface for the registry is accessible under `<your domain>/registry-ui/`.
+* The user interface for the registry is accessible under `https://<your domain>/registry-ui/`.
 
 ## Remarks
 
