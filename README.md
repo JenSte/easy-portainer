@@ -20,7 +20,7 @@ A configuration template to get the following up and running within seconds:
 
 ## Usage
 
-* If everything is working properly, the TLS connection to your domain sould be using
+* If everything is working properly, the TLS connection to your domain should be using
   a valid (verified by Let's Encrypt) server certificate.
 * Portainer is accessible under `https://<your domain>/portainer/`.
 * The Traefik dashboard is accessible under `https://<your domain>/dashboard/`.
