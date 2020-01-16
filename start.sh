@@ -16,6 +16,10 @@ UI_CREDENTIALS="${UI_USER}:${UI_CREDENTIALS}"
 REGISTRY_CREDENTIALS="$(docker run --rm httpd:2.4-alpine htpasswd -nbB admin ${REGISTRY_PASS} | cut -d ":" -f 2)"
 REGISTRY_CREDENTIALS="${REGISTRY_USER}:${REGISTRY_CREDENTIALS}"
 
+# Set the label to hide the containers of this stack from
+# the Portainer interface.
+PORTAINER_HIDDEN=yes
+
 # Set the label to update the container via Watchtower (https://hub.docker.com/r/containrrr/watchtower).
 # (Watchtower itself has to be started separately.)
 WATCHTOWER_ENABLE=true
@@ -26,6 +30,7 @@ export UI_CREDENTIALS
 export REGISTRY_CREDENTIALS
 export EMAIL
 export DOMAIN
+export PORTAINER_HIDDEN
 export WATCHTOWER_ENABLE
 
 docker-compose build

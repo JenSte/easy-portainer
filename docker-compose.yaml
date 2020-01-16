@@ -27,14 +27,14 @@ services:
       - "traefik.http.middlewares.traefik-basicauth.basicauth.users=${DASHBOARD_CREDENTIALS}"
       - "traefik.http.middlewares.traefik-basicauth.basicauth.realm=Traefik Dashboard"
       - "traefik.http.routers.traefik.service=api@internal"
-      - "portainer.hidden=yes"
+      - "portainer.hidden=${PORTAINER_HIDDEN}"
       - "com.centurylinklabs.watchtower.enable=${WATCHTOWER_ENABLE}"
   portainer:
     image: "portainer/portainer"
     command:
       - "--admin-password=${PORTAINER_CREDENTIALS}"
       - "--hide-label"
-      -   "portainer.hidden=yes"
+      - "portainer.hidden=${PORTAINER_HIDDEN}"
       - "--no-analytics"
     restart: "unless-stopped"
     volumes:
@@ -47,7 +47,7 @@ services:
       - "traefik.http.routers.portainer.rule=Host(`${DOMAIN}`) && PathPrefix(`/portainer/`)"
       - "traefik.http.routers.portainer.middlewares=portainer-stripprefix@docker"
       - "traefik.http.middlewares.portainer-stripprefix.stripprefix.prefixes=/portainer/"
-      - "portainer.hidden=yes"
+      - "portainer.hidden=${PORTAINER_HIDDEN}"
       - "com.centurylinklabs.watchtower.enable=${WATCHTOWER_ENABLE}"
   registry:
     image: "registry:2"
@@ -66,7 +66,7 @@ services:
       - "traefik.http.routers.registry.middlewares=registry-basicauth@docker"
       - "traefik.http.middlewares.registry-basicauth.basicauth.users=${REGISTRY_CREDENTIALS}"
       - "traefik.http.middlewares.registry-basicauth.basicauth.realm=Docker Registry"
-      - "portainer.hidden=yes"
+      - "portainer.hidden=${PORTAINER_HIDDEN}"
       - "com.centurylinklabs.watchtower.enable=${WATCHTOWER_ENABLE}"
   registry-ui:
     image: "joxit/docker-registry-ui:static"
