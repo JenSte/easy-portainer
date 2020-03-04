@@ -74,6 +74,7 @@ services:
     environment:
       REGISTRY_URL: "http://registry:5000"
       REGISTRY_TITLE: "${DOMAIN}"
+      PULL_URL: "${DOMAIN}"
       DELETE_IMAGES: "true"
     labels:
       - "traefik.enable=true"
