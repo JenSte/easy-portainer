@@ -48,3 +48,23 @@ A configuration template to get the following up and running within seconds:
   Note that even when all tags of an image are removed, the image is still listed in the top-level list
   of the UI. See also the corresponding entry in the
   [Docker Registry UI FAQ](https://github.com/Joxit/docker-registry-ui#faq) and the linked issue.
+* You should make sure that you keep the Docker containers up-to-date,
+  especially as they are connected to the public internet.
+  One popular way to do this is to use [Watchtower](https://containrrr.github.io/watchtower/),
+  a program that watches for updated images and then recreates your containers.
+  By default, the containers started by the `start.sh` script already have the
+  `com.centurylinklabs.watchtower.enable` label set, but Watchtower has to be started separately.
+  For example, you could create a stack in Portainer using the following YAML:
+  ```
+  version: "2"
+
+  services:
+    watchtower:
+      image: containrrr/watchtower
+      restart: unless-stopped
+      volumes:
+        - /var/run/docker.sock:/var/run/docker.sock
+      command: --label-enable --cleanup
+  ```
+  Watchtower will then update the container when new images are available,
+  and also delete the old, then unused, images.
