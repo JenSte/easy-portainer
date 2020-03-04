@@ -5,6 +5,17 @@ set -u
 
 source credentials
 
+if [[ "$PORTAINER_PASS" == "insecure" ||
+      "$DASHBOARD_PASS" == "insecure" ||
+      "$UI_PASS" == "insecure" ||
+      "$REGISTRY_PASS" == "insecure" ||
+      "$DOMAIN" == "example.com" ||
+      "$EMAIL" == "john.doe@example.com" ]]; then
+    echo "Please adjust the settings in the 'credentials' file!"
+    echo "(And probably read the readme file first.)"
+    exit 1
+fi
+
 PORTAINER_CREDENTIALS="$(docker run --rm httpd:2.4-alpine htpasswd -nbB admin ${PORTAINER_PASS} | cut -d ":" -f 2)"
 
 DASHBOARD_CREDENTIALS="$(docker run --rm httpd:2.4-alpine htpasswd -nbB admin ${DASHBOARD_PASS} | cut -d ":" -f 2)"
