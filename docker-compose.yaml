@@ -93,7 +93,7 @@ services:
       - "traefik.http.middlewares.registry-ui-basicauth.basicauth.users=${UI_CREDENTIALS}"
       - "traefik.http.middlewares.registry-ui-basicauth.basicauth.realm=Docker Registry User Interface"
       - "traefik.http.middlewares.registry-ui-stripprefix.stripprefix.prefixes=/registry-ui/"
-      - "portainer.hidden=yes"
+      - "portainer.hidden=${PORTAINER_HIDDEN}"
       - "com.centurylinklabs.watchtower.enable=${WATCHTOWER_ENABLE}"
 
 volumes:
