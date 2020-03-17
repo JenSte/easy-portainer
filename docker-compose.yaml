@@ -1,4 +1,4 @@
-version: '3'
+version: '3.5'
 
 services:
   traefik:
@@ -13,6 +13,8 @@ services:
       - "--certificatesResolvers.tlsresolver.acme.storage=/letsencrypt/acme.json"
      #- "--accesslog"
     restart: "unless-stopped"
+    networks:
+      - "traefik"
     ports:
       - "443:443"
     volumes:
@@ -37,6 +39,8 @@ services:
       - "portainer.hidden=${PORTAINER_HIDDEN}"
       - "--no-analytics"
     restart: "unless-stopped"
+    networks:
+      - "traefik"
     volumes:
       - "/var/run/docker.sock:/var/run/docker.sock"
       - "portainer-data:/data"
@@ -54,6 +58,8 @@ services:
     restart: "unless-stopped"
     environment:
       REGISTRY_STORAGE_DELETE_ENABLED: "true"
+    networks:
+      - "traefik"
     ports:
       - "5000:5000"
     volumes:
@@ -70,6 +76,8 @@ services:
       - "com.centurylinklabs.watchtower.enable=${WATCHTOWER_ENABLE}"
   registry-ui:
     image: "joxit/docker-registry-ui:static"
+    networks:
+      - "traefik"
     restart: "unless-stopped"
     environment:
       REGISTRY_URL: "http://registry:5000"
@@ -92,3 +100,7 @@ volumes:
   traefik-data:
   portainer-data:
   registry-data:
+
+networks:
+  traefik:
+    name: "traefik"

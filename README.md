@@ -68,3 +68,21 @@ A configuration template to get the following up and running within seconds:
   ```
   Watchtower will then update the container when new images are available,
   and also delete the old, then unused, images.
+* To serve additional containers using the traefik proxy, you have to
+  attach them to the network called `traefik`, for example:
+  ```
+  version: "2"
+
+  services:
+    myservice:
+      image: ...
+    networks:
+      - "traefik"
+    labels:
+      - "traefik.enable=true"
+      <additional traefik configuration keys here>
+
+  networks:
+    traefik:
+      external: true
+  ```
