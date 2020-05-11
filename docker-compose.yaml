@@ -12,6 +12,7 @@ services:
       - "--certificatesResolvers.tlsresolver.acme.tlsChallenge=true"
       - "--certificatesResolvers.tlsresolver.acme.email=${EMAIL}"
       - "--certificatesResolvers.tlsresolver.acme.storage=/letsencrypt/acme.json"
+      - "--providers.file.filename=/etc/traefik/tls.toml"
      #- "--accesslog"
     restart: "unless-stopped"
     networks:
@@ -21,6 +22,7 @@ services:
     volumes:
       - "/var/run/docker.sock:/var/run/docker.sock:ro"
       - "traefik-data:/letsencrypt"
+      - "./tls.toml:/etc/traefik/tls.toml:ro"
     labels:
       - "traefik.enable=true"
       - "traefik.http.routers.traefik.entrypoints=https"
